@@ -221,17 +221,17 @@ ScreenManager:
     MDIconButton:
         id : username_check_extra_button
         icon: "reload"
-        pos_hint: {'center_x':0.68,'center_y':0.62}
+        pos_hint: {'center_x':0.69,'center_y':0.62}
         theme_text_color: "Custom"
         text_color: app.theme_cls.primary_color
         user_font_size: "40sp"
             
-    MDRectangleFlatButton:
+    MDRoundFlatButton:
         id: username_check_btn
         text: 'Check'
 
         pos_hint: {'center_x':0.5,'center_y':0.62}
-        font_size: '18sp'
+        font_size: '23sp'
         on_release: app.username_checker()
     
     MDProgressBar:
@@ -316,7 +316,7 @@ ScreenManager:
         halign: 'center'
         pos_hint: {'center_y':0.9}
         font_style: 'H3'
-    MDRectangleFlatButton:
+    MDRoundFlatButton:
         id : dob
         text: 'Select'   
         pos_hint: {'center_x':0.5,'center_y':0.5}

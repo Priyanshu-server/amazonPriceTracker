@@ -123,6 +123,7 @@ class AmazonApp(MDApp):
             screen_usernamescreen.ids.username_check_btn.text = 'Checked'
             screen_usernamescreen.ids.username_check_extra_button.icon = 'account-check-outline'
             screen_usernamescreen.ids.username_check_btn.text_color = [1,1,1,0]
+            screen_usernamescreen.ids.username_check_btn.md_bg_color =[1,1,1,0]
             screen_usernamescreen.ids.username_check_extra_button.text_color = self.theme_cls.primary_color
             screen_usernamescreen.ids.username_check_extra_button.pos_hint = {'center_x':0.5,'center_y':0.62}
             screen_usernamescreen.ids.username_check_extra_button.user_font_size = '50sp'
@@ -153,9 +154,9 @@ class AmazonApp(MDApp):
 
     def get_date(self, date):
         self.dob = date
-
+        dob_input_screen_selector = self.helper_string.get_screen('dobinput')
         #here i put the next button disbaled as False so user can enter in that window
-        self.helper_string.get_screen('dobinput').ids.dob_enter.disabled = False
-        self.helper_string.get_screen('dobinput').ids.account_shield.icon = 'shield-account'
-        self.helper_string.get_screen('dobinput').ids.dob.text = str(self.dob)
+        dob_input_screen_selector.ids.dob_enter.disabled = False
+        dob_input_screen_selector.ids.account_shield.icon = 'shield-account'
+        dob_input_screen_selector.ids.dob.text = str(self.dob)
 AmazonApp().run()
