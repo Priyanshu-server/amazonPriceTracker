@@ -178,6 +178,7 @@ ScreenManager:
             root.manager.transition.direction = 'up'
     
     MDTextField:
+        id: username_text
         hint_text: "Enter Username"
         color_mode: 'custom'
         line_color_normal: app.theme_cls.primary_color
@@ -209,6 +210,7 @@ ScreenManager:
 
     MDFloatingActionButton:
         id : username_enter 
+        disabled: True
         icon: "arrow-right"
         pos_hint: {'center_x':0.83,'center_y':0.11}
         md_bg_color: app.theme_cls.primary_color
@@ -216,8 +218,21 @@ ScreenManager:
         on_release:
             root.manager.current = 'dobinput'
             root.manager.transition.direction = 'left'
+    MDIconButton:
+        id : username_check_extra_button
+        icon: "reload"
+        pos_hint: {'center_x':0.68,'center_y':0.62}
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.primary_color
+        user_font_size: "40sp"
             
-    
+    MDRectangleFlatButton:
+        id: username_check_btn
+        text: 'Check'
+
+        pos_hint: {'center_x':0.5,'center_y':0.62}
+        font_size: '18sp'
+        on_release: app.username_checker()
     
     MDProgressBar:
         value: 60
@@ -330,7 +345,7 @@ ScreenManager:
     MDFloatingActionButton:
         icon: "arrow-right"
         disabled: True
-        id : username_enter 
+        id : dob_enter 
         pos_hint: {'center_x':0.83,'center_y':0.11}
         md_bg_color: app.theme_cls.primary_color
         user_font_size: "43sp"
@@ -345,10 +360,9 @@ ScreenManager:
         user_font_size: "50sp"
         theme_text_color: "Custom"
         text_color: [1,0,0,1]
-        on_press: root.ids.secure.text_color= [0,1,0,0.6]
-        on_release:
-            Snackbar(text="Secure Environment").show()
+        on_press: app.pirate_color()
     MDIconButton:
+        id: account_shield
         icon: 'account-circle'
         theme_text_color: "Custom"
         text_color: app.theme_cls.primary_color

@@ -4,6 +4,7 @@ from kivymd.uix.button import MDFlatButton,MDIconButton,MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.app import MDApp
 from helper import code_helper
+from kivymd.uix.snackbar import Snackbar
 
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -95,23 +96,58 @@ class AmazonApp(MDApp):
 
     def help_chip(self, instance, value):
         help_cancel_btn_first = MDIconButton(icon = 'checkbox-marked-circle-outline',on_release = self.help_close_dialog_btn)
-        self.dialog = MDDialog(title = 'Help',
+        self.help_dialog = MDDialog(title = 'Help',
                                text = 'Little android is your assistant\nClick the android for more Info',
                                size_hint = (0.7,0.1),buttons = [help_cancel_btn_first])
-        self.dialog.open()
+        self.help_dialog.open()
 
     def help_close_dialog_btn(self,obj):
-        self.dialog.dismiss()
+        self.help_dialog.dismiss()
+
+
+    def username_checker(self):
+        username_check_false = True
+        username_text_data = self.helper_string.get_screen('usernamescreen').ids.username_text.text
+        print(username_text_data)
+        try:
+            int(username_text_data)
+        except:
+            username_check_false = False
+        if username_check_false or username_text_data.split()==[]:
+            cancel_btn_username_dialogue = MDFlatButton(text = 'Retry',on_release = self.close_username_dialog)
+            self.username_dialoge = MDDialog(title = 'Invalid Username',text = 'Please Enter a valid Username',size_hint = (0.7,0.2),buttons = [cancel_btn_username_dialogue])
+            self.username_dialoge.open()
+        else:
+            screen_usernamescreen = self.helper_string.get_screen('usernamescreen')
+            screen_usernamescreen.ids.username_enter.disabled = False
+            screen_usernamescreen.ids.username_check_btn.text = 'Checked'
+            screen_usernamescreen.ids.username_check_extra_button.icon = 'account-check-outline'
+            screen_usernamescreen.ids.username_check_btn.text_color = [1,1,1,0]
+            screen_usernamescreen.ids.username_check_extra_button.text_color = self.theme_cls.primary_color
+            screen_usernamescreen.ids.username_check_extra_button.pos_hint = {'center_x':0.5,'center_y':0.62}
+            screen_usernamescreen.ids.username_check_extra_button.user_font_size = '50sp'
+    def close_username_dialog(self,obj):
+        self.username_dialoge.dismiss()
+
+
     
 # DOB Picker
 #self.dob for Date of birth
 
+    def pirate_color(self):
+        id_secure = self.helper_string.get_screen('dobinput').ids.secure
+        if id_secure.text_color == [1,0,0,1]:
+            id_secure.text_color = [0,1,0,0.7]
+        else:
+            id_secure.text_color = [1,0,0,1]
+
+
     def show_date_picker(self):
         date_dialog = MDDatePicker(
             callback=self.get_date,
-            year=2010,
-            month=2,
-            day=12,
+            year=1999,
+            month=1,
+            day=1,
         )
         date_dialog.open()
 
@@ -119,7 +155,7 @@ class AmazonApp(MDApp):
         self.dob = date
 
         #here i put the next button disbaled as False so user can enter in that window
-        
-        self.helper_string.get_screen('dobinput').ids.username_enter.disabled = False
-
+        self.helper_string.get_screen('dobinput').ids.dob_enter.disabled = False
+        self.helper_string.get_screen('dobinput').ids.account_shield.icon = 'shield-account'
+        self.helper_string.get_screen('dobinput').ids.dob.text = str(self.dob)
 AmazonApp().run()
