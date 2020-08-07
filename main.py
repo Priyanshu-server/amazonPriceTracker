@@ -1,6 +1,6 @@
 from kivy.lang import Builder
 from kivymd.uix.picker import MDDatePicker
-from kivymd.uix.button import MDFlatButton,MDIconButton
+from kivymd.uix.button import MDFlatButton,MDIconButton,MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.app import MDApp
 from helper import code_helper
@@ -24,6 +24,10 @@ class AndroidInfo(Screen):
 class UsernameScreen(Screen):
     pass
 
+class UsernameHelper(Screen):
+    pass
+
+
 class dobscreen(Screen):
     pass
 
@@ -39,6 +43,7 @@ sm.add_widget(WelcomeScreen(name = 'firstwelcome'))
 sm.add_widget(AndroidInfo(name = 'androidinfo'))
 sm.add_widget(AssistantWelcome(name = 'assistantwelcome'))
 sm.add_widget(UsernameScreen(name = 'usernamescreen'))
+sm.add_widget(UsernameHelper(name = 'usernamehelper'))
 sm.add_widget(dobscreen(name = 'dobentered'))
 sm.add_widget(UserEnter(name = 'userenter'))
 
@@ -84,7 +89,6 @@ class AmazonApp(MDApp):
     def help_close_dialog_btn(self,obj):
         self.dialog.dismiss()
     
-    
 # DOB Picker
 #self.dob for Date of birth
 
@@ -103,4 +107,5 @@ class AmazonApp(MDApp):
         #here i put the next button disbaled as False so user can enter in that window
         
         self.helper_string.get_screen('dobinput').ids.username_enter.disabled = False
+
 AmazonApp().run()
