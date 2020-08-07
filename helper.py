@@ -84,7 +84,7 @@ ScreenManager:
     #:import Snackbar kivymd.uix.snackbar.Snackbar
     MDBackdrop:
         header: ''
-        radius: 20
+        radius: 21
         id: backdrop
         title:'Hello!! I am your assistant'
         left_action_items: [['menu-open',lambda x: self.open()]]
@@ -245,7 +245,7 @@ ScreenManager:
     #:import Snackbar kivymd.uix.snackbar.Snackbar
     MDBackdrop:
         header: ''
-        radius: 20
+        radius: 21
         id: backdrop
         title:'Hello!! I am your assistant'
         left_action_items: [['menu-open',lambda x: self.open()]]
@@ -383,7 +383,7 @@ ScreenManager:
     #:import Snackbar kivymd.uix.snackbar.Snackbar
     MDBackdrop:
         header: ''
-        radius: 20
+        radius: 21
         id: backdrop
         title:'Hello!! I am your assistant'
         left_action_items: [['menu-open',lambda x: self.open()]]
