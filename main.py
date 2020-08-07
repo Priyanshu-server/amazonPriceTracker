@@ -31,6 +31,9 @@ class UsernameHelper(Screen):
 class dobscreen(Screen):
     pass
 
+class DobHelper(Screen):
+    pass
+
 class UserEnter(Screen):
     pass
 
@@ -45,12 +48,14 @@ sm.add_widget(AssistantWelcome(name = 'assistantwelcome'))
 sm.add_widget(UsernameScreen(name = 'usernamescreen'))
 sm.add_widget(UsernameHelper(name = 'usernamehelper'))
 sm.add_widget(dobscreen(name = 'dobentered'))
+sm.add_widget(DobHelper(name = 'dobhelper'))
 sm.add_widget(UserEnter(name = 'userenter'))
 
 class AmazonApp(MDApp):
     
     def build(self):
         screen = Screen()
+        self.theme_cls.theme_style = "Light"
         self.helper_string = Builder.load_string(code_helper)
         screen.add_widget(self.helper_string)
         self.skip_target_view = MDTapTargetView(
@@ -69,6 +74,15 @@ class AmazonApp(MDApp):
         #self.dob initialize
         self.dob_entered= True
         return screen
+    
+    
+    def theme_switcher(self):
+        if self.theme_cls.theme_style == "Dark":
+            self.theme_cls.theme_style = "Light"
+        else:
+            self.theme_cls.theme_style = "Dark"
+    
+    
     
     def tap_target_stop(self):
         self.skip_target_view.stop()
