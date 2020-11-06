@@ -4,12 +4,16 @@ from kivymd.uix.button import MDFlatButton,MDIconButton,MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.app import MDApp
 from helper import code_helper
+from kivy.storage.jsonstore import JsonStore
 from kivymd.uix.snackbar import Snackbar
 
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 from kivymd.uix.taptargetview import MDTapTargetView
+
+import requests
+from bs4 import BeautifulSoup
 
 Window.size = (400,600)
 
@@ -35,13 +39,20 @@ class dobscreen(Screen):
 class DobHelper(Screen):
     pass
 
-class UserEnter(Screen):
-    pass
-
 class AssistantWelcome(Screen):
     pass
 
+class FinalWelcome(Screen):
+    pass
+class Main(Screen):
+    pass
 
+class Result(Screen):
+    pass
+class Setting(Screen):
+    pass
+class About(Screen):
+    pass
 sm = ScreenManager()
 sm.add_widget(WelcomeScreen(name = 'firstwelcome'))
 sm.add_widget(AndroidInfo(name = 'androidinfo'))
@@ -50,8 +61,11 @@ sm.add_widget(UsernameScreen(name = 'usernamescreen'))
 sm.add_widget(UsernameHelper(name = 'usernamehelper'))
 sm.add_widget(dobscreen(name = 'dobentered'))
 sm.add_widget(DobHelper(name = 'dobhelper'))
-sm.add_widget(UserEnter(name = 'userenter'))
-
+sm.add_widget(FinalWelcome(name = 'finalwelcome'))
+sm.add_widget(Main(name = 'main'))
+sm.add_widget(Result(name = "result"))
+sm.add_widget(Setting(name = "setting"))
+sm.add_widget(Setting(name = "about"))
 class AmazonApp(MDApp):
     
     def build(self):
@@ -107,26 +121,29 @@ class AmazonApp(MDApp):
 
     def username_checker(self):
         username_check_false = True
-        username_text_data = self.helper_string.get_screen('usernamescreen').ids.username_text.text
-        print(username_text_data)
+        self.username_text_data = self.helper_string.get_screen('usernamescreen').ids.username_text.text
+        # print(self.username_text_data)
         try:
-            int(username_text_data)
+            int(self.username_text_data)
         except:
+            
             username_check_false = False
-        if username_check_false or username_text_data.split()==[]:
+        if username_check_false or self.username_text_data.split()==[]:
             cancel_btn_username_dialogue = MDFlatButton(text = 'Retry',on_release = self.close_username_dialog)
             self.username_dialoge = MDDialog(title = 'Invalid Username',text = 'Please Enter a valid Username',size_hint = (0.7,0.2),buttons = [cancel_btn_username_dialogue])
             self.username_dialoge.open()
         else:
             screen_usernamescreen = self.helper_string.get_screen('usernamescreen')
             screen_usernamescreen.ids.username_enter.disabled = False
-            screen_usernamescreen.ids.username_check_btn.text = 'Checked'
             screen_usernamescreen.ids.username_check_extra_button.icon = 'account-check-outline'
             screen_usernamescreen.ids.username_check_btn.text_color = [1,1,1,0]
             screen_usernamescreen.ids.username_check_btn.md_bg_color =[1,1,1,0]
             screen_usernamescreen.ids.username_check_extra_button.text_color = self.theme_cls.primary_color
             screen_usernamescreen.ids.username_check_extra_button.pos_hint = {'center_x':0.5,'center_y':0.62}
-            screen_usernamescreen.ids.username_check_extra_button.user_font_size = '50sp'
+            screen_usernamescreen.ids.username_check_extra_button.user_font_size = '60sp'
+
+
+
     def close_username_dialog(self,obj):
         self.username_dialoge.dismiss()
 
@@ -135,12 +152,6 @@ class AmazonApp(MDApp):
 # DOB Picker
 #self.dob for Date of birth
 
-    def pirate_color(self):
-        id_secure = self.helper_string.get_screen('dobinput').ids.secure
-        if id_secure.text_color == [1,0,0,1]:
-            id_secure.text_color = [0,1,0,0.7]
-        else:
-            id_secure.text_color = [1,0,0,1]
 
 
     def show_date_picker(self):
@@ -159,4 +170,87 @@ class AmazonApp(MDApp):
         dob_input_screen_selector.ids.dob_enter.disabled = False
         dob_input_screen_selector.ids.account_shield.icon = 'shield-account'
         dob_input_screen_selector.ids.dob.text = str(self.dob)
+        dob_input_screen_selector.ids.secure.text_color = [0,1,0,0.7]
+        self.store.put('userInfo',name=self.username_text_data,dob = str(self.dob))
+        self.username_changer()
+
+    
+    def navigation_draw(self):
+        self.helper_string.get_screen('about').manager.current = "about"
+    
+    def username_changer(self):
+        self.helper_string.get_screen('main').ids.title.title = self.store.get('userInfo')['name']
+    
+
+    def price(self):
+        link = self.helper_string.get_screen('main').ids.Link.text
+        if link.split() != []:
+            self.price_finder(URL=link)
+        else:
+            
+            self.helper_string.get_screen('main').manager.current = "main"
+    
+
+
+    def price_finder(self,URL):
+        try:
+            r = requests.get(URL,headers={"User-Agent":"Defined"})
+            soup = BeautifulSoup(r.content,"html.parser")
+            try:
+                if 'amazon' in URL:
+                    try:
+                        price_one = soup.find(id="priceblock_dealprice")
+                        price = price_one
+                    except:
+                        print("in ourprice")
+                        price_two = soup.find(id = "priceblock_ourprice")
+                        price = price_two
+                elif 'flipkart' in URL:
+                    try:
+                        price = soup.find(class_ = '_1vC4OE _3qQ9m1')
+                    except:
+                        self.helper_string.get_screen('main').manager.current = "main"
+            except:
+                self.helper_string.get_screen('main').manager.current = "main"
+
+            if price == None:
+                self.helper_string.get_screen('main').manager.current = "main"
+            else:
+                current_price = price.get_text()
+                self.helper_string.get_screen('result').ids.realPrice.text = current_price
+                
+
+
+        except:
+            self.helper_string.get_screen('main').manager.current = "main"
+        
+    def setting_username_checker(self):
+        username_check_false = True
+        self.new_username = self.helper_string.get_screen('setting').ids.new_username.text
+        try:
+            int(self.new_username)
+        except:
+            
+            username_check_false = False
+        if username_check_false or self.new_username.split()==[]:
+            cancel_btn_username_dialogue = MDFlatButton(text = 'Retry',on_release = self.close_username_dialog)
+            self.username_dialoge = MDDialog(title = 'Invalid Username',text = 'Please Enter a valid Username',size_hint = (0.7,0.2),buttons = [cancel_btn_username_dialogue])
+            self.username_dialoge.open()
+        else:
+            self.username_text_data = self.new_username
+            self.store.put('userInfo',name=self.username_text_data)
+            self.username_changer()
+            self.helper_string.get_screen('main').manager.current = "main"
+
+
+    def change_edit_username(self):
+        self.helper_string.get_screen('setting').ids.new_username.text = self.store.get('userInfo')['name']
+    def on_start(self):
+        self.store = JsonStore("userProfile.json")
+        try:
+            if self.store.get('userInfo')['name'] != "":
+                self.username_changer()
+                self.helper_string.get_screen('main').manager.current = "main"
+        except KeyError:
+            self.helper_string.get_screen('firstwelcome').manager.current = 'firstwelcome'
 AmazonApp().run()

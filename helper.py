@@ -7,7 +7,11 @@ ScreenManager:
     UsernameHelper:
     dobscreen:
     DobHelper:
-    UserEnter:
+    FinalWelcome:
+    Main:
+    Result:
+    Setting:
+    About:
     
 
 
@@ -125,7 +129,7 @@ ScreenManager:
                     orientation: "vertical"
                     padding: "8dp"
                     size_hint: None, None
-                    size: "350dp", "180dp"
+                    size: "253dp", "180dp"
                     pos_hint: {"center_x": .01, "center_y": .6}
 
                     MDLabel:
@@ -156,13 +160,13 @@ ScreenManager:
         font_style: 'H3'
     MDFloatingActionButton:
         id : welcome_back
-        icon: "arrow-left"
+        icon: "arrow-up"
         pos_hint: {'center_x':0.15,'center_y':0.1}
         md_bg_color: app.theme_cls.primary_color
         user_font_size: "35sp"
         on_release :
             root.manager.current = 'firstwelcome'
-            root.manager.transition.direction = 'right'
+            root.manager.transition.direction = 'down'
             
 
             
@@ -203,7 +207,7 @@ ScreenManager:
     
     MDRoundFlatIconButton:
         text: 'Theme'
-        icon: 'theme-light-dark'
+        icon: 'theme-light-dark' 
         pos_hint: {'center_x':0.213,'center_y':0.42}
         font_size: '18sp'
         on_release: app.theme_switcher()
@@ -223,7 +227,7 @@ ScreenManager:
         icon: "reload"
         pos_hint: {'center_x':0.69,'center_y':0.62}
         theme_text_color: "Custom"
-        text_color: app.theme_cls.primary_color
+        text_color: [0,0,0,0]
         user_font_size: "40sp"
             
     MDRoundFlatButton:
@@ -284,7 +288,7 @@ ScreenManager:
                     orientation: "vertical"
                     padding: "8dp"
                     size_hint: None, None
-                    size: "300dp", "150dp"
+                    size: "253dp", "150dp"
                     pos_hint: {"center_x": .05, "center_y": .6}
 
                     MDLabel:
@@ -350,7 +354,7 @@ ScreenManager:
         md_bg_color: app.theme_cls.primary_color
         user_font_size: "43sp"
         on_release:
-            root.manager.current = 'userenter'
+            root.manager.current = 'finalwelcome'
             root.manager.transition.direction = 'left'
 
     MDIconButton:
@@ -360,7 +364,6 @@ ScreenManager:
         user_font_size: "50sp"
         theme_text_color: "Custom"
         text_color: [1,0,0,1]
-        on_press: app.pirate_color()
     MDIconButton:
         id: account_shield
         icon: 'account-circle'
@@ -422,7 +425,7 @@ ScreenManager:
                     orientation: "vertical"
                     padding: "8dp"
                     size_hint: None, None
-                    size: "300dp", "150dp"
+                    size: "253", "150dp"
                     pos_hint: {"center_x": .05, "center_y": .6}
 
                     MDLabel:
@@ -448,19 +451,195 @@ ScreenManager:
 
 
 
-<UserEnter>:
-    name: 'userenter'
+<FinalWelcome>:
+    name: 'finalwelcome'
     MDLabel:
-        text: 'Hello World'
-    MDIconButton:
-        id : username_enter
-        icon: "arrow-left"
-        pos_hint: {'center_x':0.15,'center_y':0.1}
-        user_font_size: "40sp"
-        on_release:
-            root.manager.current = 'dobinput'
-            root.manager.transition.direction = 'right'
+        text: 'Account Setup Complete'
+        halign: 'center'
+        font_style: 'H3'
 
+    MDFloatingActionButton:
+        icon: 'account-check'
+        md_bg_color: app.theme_cls.primary_color
+        pos_hint: {'center_x':0.5,'center_y':0.78}
+        user_font_size : '145sp'
+
+    MDIconButton:
+        icon: "location-enter"
+        pos_hint: {'center_x':0.5,'center_y':0.25}
+        user_font_size : '140sp'
+        # md_bg_color: app.theme_cls.primary_color
+        theme_text_color: "Custom"
+        text_color: app.theme_cls.primary_color
+        on_release :
+            root.manager.current = 'main'
+            root.manager.transition.direction = 'left'
+        
+
+<Main>:
+    name:"main"
+    MDTextField:
+        id: Link
+        hint_text: "Enter Link"
+        color_mode: 'custom'
+        line_color_normal: app.theme_cls.primary_color
+        line_color_focus: 0,0.2,0.6,1
+        helper_text: "Required"
+        helper_text_mode: "on_error"
+        mode: "rectangle"
+        icon_right: 'account'
+        icon_right_color: 0,0.2,0.3,0.9
+        pos_hint: {'center_x':0.5,'center_y':0.7}
+        required: True
+        size_hint: (0.8,0.1)
+    MDFloatingActionButton:
+        icon: "cloud-search-outline"
+        pos_hint: {'center_x':0.5,'center_y':0.5}
+        md_bg_color: app.theme_cls.primary_color
+        user_font_size: "35sp"
+        on_release :
+            
+            root.manager.current = 'result'
+            root.manager.transition.direction = 'left'
+            app.price()
+
+
+
+
+
+    NavigationLayout:
+        ScreenManager:
+            Screen:
+                BoxLayout:
+                    orientation: 'vertical'
+                    MDToolbar:
+                        id:title
+                        title: ""
+                        elevation: 10
+                        left_action_items: [['menu', lambda x: nav_drawer.set_state()]]
+                    
+                    MDBottomAppBar:
+                        MDToolbar:
+                            title: 'About'
+                            left_action_items : [['language-python',lambda x: app.navigation_draw()]]
+                            type: 'bottom'
+                            mode : 'free-end'
+                            icon: 'coffee'
+                            on_action_button: root.manager.current = 'about'
+
+                    
+                    Widget:
+        MDNavigationDrawer:
+            id: nav_drawer
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: '8dp'
+                padding: '8dp'
+
+
+                
+                MDLabel:
+                    text: '  Amazon Price Tracker'
+                    font_style: 'H5'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                ScrollView:
+                    MDList:
+                        OneLineIconListItem:
+                            text: ''
+                        OneLineIconListItem:
+                            text: 'Edit Username'
+                            on_release: 
+                                app.change_edit_username()
+                                root.manager.current = 'setting'
+                            IconLeftWidget:
+                                icon: 'face-profile'
+                        OneLineIconListItem:
+                            text: 'About'
+                            on_release: 
+                                root.manager.current = 'about'
+                            IconLeftWidget:
+                                icon: 'emoticon-tongue-outline'
+                        OneLineIconListItem:
+                            text: 'Exit'
+                            on_release: quit()
+                            IconLeftWidget:
+                                icon: 'location-exit'
+
+<Result>:
+    name:"result"
+    MDLabel:
+        text:"Price"
+        font_style:"H2"
+        pos_hint:{'center_y':0.9}
+        halign:'center'  
+    MDLabel:
+        id:realPrice
+        text:""
+        font_style:"H2"
+        pos_hint:{'center_y':0.55}
+        halign:'center'  
+    MDFloatingActionButton:
+        icon: "arrow-left"
+        pos_hint: {'center_x':0.5,'center_y':0.25}
+        md_bg_color: app.theme_cls.primary_color
+        user_font_size: "55sp"
+        on_release :
+            root.manager.current = 'main'
+            root.manager.transition.direction = 'right'
+<Setting>:
+    name:"setting"
+    MDLabel:
+        text:"Settings"
+        font_style:"H2"
+        pos_hint:{'center_y':0.88}
+        halign:"center"
+    MDTextField:
+        id: new_username
+        text:""
+        hint_text: "New Username"
+        color_mode: 'custom'
+        line_color_normal: app.theme_cls.primary_color
+        line_color_focus: 0,0.5,0,1
+        helper_text: "Required"
+        helper_text_mode: "on_error"
+        icon_right: 'account'
+        icon_right_color: 0,0.5,0,0.9
+        pos_hint: {'center_x':0.5,'center_y':0.7}
+        required: True
+        size_hint: (0.8,0.1)
+    MDFloatingActionButton:
+        icon: "check-circle"
+        pos_hint: {'center_x':0.5,'center_y':0.25}
+        md_bg_color: app.theme_cls.primary_color
+        user_font_size: "55sp"
+        on_release :
+            app.setting_username_checker()
+    
+<About>:
+    name : "about"
+    MDLabel:
+        text:"About"
+        font_style:"H2"
+        halign:"center"
+        pos_hint:{'center_y':0.8}
+    MDLabel:
+        text:"Well ! This app requires less Internet and gives you instant Result. You don't need to Open the Amazon website again and again just open the app and track your price <:)>"
+        halign:"center"
+    MDLabel:
+        text:"Made by Priyanshu & Sharique"
+        halign : "center"
+        pos_hint : {'center_y':0.3}
     
 
+
+    MDFloatingActionButton:
+        icon: "arrow-left"
+        pos_hint: {'center_x':0.5,'center_y':0.15}
+        md_bg_color: app.theme_cls.primary_color
+        user_font_size: "55sp"
+        on_release :
+            root.manager.current = 'main'
+    
 """
